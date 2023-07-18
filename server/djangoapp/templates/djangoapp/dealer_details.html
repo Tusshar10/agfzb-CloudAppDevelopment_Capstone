@@ -6,13 +6,74 @@
     {% load static %}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="{% url 'djangoapp:index'%}">Best Cars</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+              <a class="nav-link active" aria-current="page" href="{% url 'djangoapp:contact'%}">Contact</a>
+              <a class="nav-link" href="{% url 'djangoapp:about'%}">About</a>
+            </div> 
+          </div>
+          {% if user.is_authenticated %}
+          <ul class="nav justify-content-end">
+            <li class="nav-item">
+              <a class="nav-link"  href="#">{{user.username}}</a>
+            </li>
+            <li class="nav-item">
+              <a class="btn btn-primary" href="{% url 'djangoapp:logout' %}">Logout</a>
+            </li>
+          </ul>
+          {% else %}
+          <ul class="nav justify-content-end">
+              <form action="{% url 'djangoapp:login' %}"  method="post">
+                {% csrf_token %}
+                <input class="me-2" type="text" placeholder="Username" name="username">
+                <input class="me-2" type="text" placeholder="Password" name="password">
+                <button class="btn btn-primary" type="submit">Login</button>
+              </form>
+            <a class="ms-1 btn btn-primary" href="{% url 'djangoapp:register' %}">Sign Up</a>
+            </ul>
+          {% endif %}
+        </div>
+    </nav>
 
-    <body>
+    <main class="container" style="padding-top: 30px;">
+        <div class="row">
+            <div class="col-md-6">
+                <h2>{{ dealer.full_name }}</h2>
+                <p>{{ dealer.address }}</p>
+                <p>{{ dealer.city }}, {{ dealer.st }} {{ dealer.zip }}</p>
+            </div>
+        </div>
 
-    <!--Add a nav bar here -->
+        <hr>
 
-    <!-- Add reviews as cards -->
+        <h3>Dealer Reviews</h3>
 
-    </body>
+        <div class="row">
+            {% for review in reviews %}
+            <div class="col-md-6">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ review.car_make }}, {{ review.car_model }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">By {{ review.name }}</h6>
+                        <p class="card-text">{{ review.review }}</p>
+                        <p class="card-text">Purchase: {{ review.purchase }}</p>
+                        <p class="card-text">Purchase Date: {{ review.purchase_date }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
 
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
 </html>
