@@ -39,7 +39,16 @@ def get_request(url, **kwargs):
 
 # Create a `post_request` to make HTTP POST requests
 # e.g., response = requests.post(url, params=kwargs, json=payload)
+def post_request(url, json_payload, **kwargs):
+    print(f"POST to {url}")
+    try:
+        response = requests.post(url, params=kwargs, json=json_payload)
+    except:
+        print("Error")
+    status_code = response.status_code
+    print(f"With status {status_code}")
 
+    return response
 
 # Create a get_dealers_from_cf method to get dealers from a cloud function
 # def get_dealers_from_cf(url, **kwargs):
@@ -91,6 +100,11 @@ def get_dealer_reviews_from_cf(url, dealer_id):
                                    name=dealer_review["name"],
                                    purchase=dealer_review["purchase"],
                                    review=dealer_review["review"])
+            try:
+                sentiment=analyze_review_sentiments(dealer_review["review"])
+                review_obj.sentiment=sentiment
+            except:
+                pass
             if "id" in dealer_review:
                 review_obj.id = dealer_review["id"]
             if "purchase_date" in dealer_review:
@@ -111,8 +125,8 @@ def get_dealer_reviews_from_cf(url, dealer_id):
 # - Call get_request() with specified arguments
 # - Get the returned sentiment label such as Positive or Negative
 def analyze_review_sentiments(text): 
-    url = "" 
-    api_key = "" 
+    url = "https://api.jp-tok.natural-language-understanding.watson.cloud.ibm.com/instances/5ee48951-1bee-42cb-a9c1-8e0e3f58abc8" 
+    api_key = "z9aa-qSn112WfAQQhXCLf-AhUS-95gFUDVPlE29BpH2N" 
     authenticator = IAMAuthenticator(api_key) 
     natural_language_understanding = NaturalLanguageUnderstandingV1(version='2021-08-01',authenticator=authenticator) 
     natural_language_understanding.set_service_url(url) 
