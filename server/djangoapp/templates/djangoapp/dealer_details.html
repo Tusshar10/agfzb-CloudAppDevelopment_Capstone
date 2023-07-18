@@ -62,7 +62,8 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ review.car_make }}, {{ review.car_model }}</h5>
                         <h6 class="card-subtitle mb-2 text-muted">By {{ review.name }}</h6>
-                        <p class="card-text">{{ review.review }}</p>
+                        <p class="card-text">Review:{{ review.review }}</p>
+                        <p class="card-text">Sentiment:{{ review.sentiment }}</p>
                         <p class="card-text">Purchase: {{ review.purchase }}</p>
                         <p class="card-text">Purchase Date: {{ review.purchase_date }}</p>
                     </div>
