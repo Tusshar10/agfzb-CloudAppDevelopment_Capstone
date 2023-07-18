@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from datetime import datetime
+from .restapis import get_dealers_from_cf
 import logging
 import json
 
@@ -80,8 +81,11 @@ def registration_request(request):
         
 # Update the `get_dealerships` view to render the index page with a list of dealerships
 def get_dealerships(request):
-    context = {}
     if request.method == "GET":
+        context = {}
+        url = "https://eu-gb.functions.appdomain.cloud/api/v1/web/e81514e9-de36-4069-8e3b-01724008e3b0/dealership-package/get-dealership"
+        dealerships = get_dealers_from_cf(url)
+        context["dealerships"] = dealerships
         return render(request, 'djangoapp/index.html', context)
 
 
